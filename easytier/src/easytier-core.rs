@@ -784,7 +784,7 @@ async fn run_main(cli: Cli) -> anyhow::Result<()> {
         let config_server_url = match url::Url::parse(&config_server_url_s) {
             Ok(u) => u,
             Err(_) => format!(
-                "udp://config-server.easytier.top:22020/{}",
+                "udp://config-server.easytier.cn:22020/{}",
                 config_server_url_s
             )
             .parse()
@@ -803,6 +803,8 @@ async fn run_main(cli: Cli) -> anyhow::Result<()> {
             "Entering config client mode...\n  server: {}\n  token: {}",
             c_url, token,
         );
+
+        println!("Official config website: https://easytier.cn/web");
 
         if token.is_empty() {
             panic!("empty token");
