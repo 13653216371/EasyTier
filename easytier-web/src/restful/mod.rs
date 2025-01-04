@@ -121,7 +121,9 @@ impl RestfulServer {
             return Err((StatusCode::UNAUTHORIZED, other_error("No such user").into()));
         };
 
-        let machines = client_mgr.list_machine_by_token(user.tokens[0].clone());
+        let machines = client_mgr
+            .list_machine_by_token(user.tokens[0].clone())
+            .await;
 
         Ok(GetSummaryJsonResp {
             device_count: machines.len() as u32,
@@ -167,7 +169,7 @@ impl RestfulServer {
             .deflate(true)
             .gzip(true)
             .zstd(true)
-            .quality(tower_http::compression::CompressionLevel::Best);
+            .quality(tower_http::compression::CompressionLevel::Default);
 
         let app = Router::new()
             .route("/api/v1/summary", get(Self::handle_get_summary))

@@ -93,7 +93,7 @@ impl ClientManager {
             .map(|item| item.value().clone())
     }
 
-    pub fn list_machine_by_token(&self, token: String) -> Vec<url::Url> {
+    pub async fn list_machine_by_token(&self, token: String) -> Vec<url::Url> {
         self.storage.list_token_clients(&token)
     }
 
