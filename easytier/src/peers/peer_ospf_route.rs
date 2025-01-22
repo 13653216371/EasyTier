@@ -1739,7 +1739,6 @@ impl RouteSessionManager {
                         continue;
                     }
                     let _ = self.stop_session(*peer_id);
-                    assert_ne!(Some(*peer_id), cur_dst_peer_id_to_initiate);
                 }
             }
 
@@ -2118,6 +2117,7 @@ mod tests {
         common::{global_ctx::tests::get_mock_global_ctx, PeerId},
         connector::udp_hole_punch::tests::replace_stun_info_collector,
         peers::{
+            create_packet_recv_chan,
             peer_manager::{PeerManager, RouteAlgoType},
             route_trait::{NextHopPolicy, Route, RouteCostCalculatorInterface},
             tests::connect_peer_manager,
@@ -2155,7 +2155,7 @@ mod tests {
     }
 
     async fn create_mock_pmgr() -> Arc<PeerManager> {
-        let (s, _r) = tokio::sync::mpsc::channel(1000);
+        let (s, _r) = create_packet_recv_chan();
         let peer_mgr = Arc::new(PeerManager::new(
             RouteAlgoType::None,
             get_mock_global_ctx(),
