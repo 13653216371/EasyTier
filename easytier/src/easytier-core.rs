@@ -313,6 +313,20 @@ struct Cli {
         help = t!("core_clap.bind_device").to_string()
     )]
     bind_device: Option<bool>,
+
+    #[arg(
+        long,
+        help = t!("core_clap.enable_kcp_proxy").to_string(),
+        default_value = "false"
+    )]
+    enable_kcp_proxy: bool,
+
+    #[arg(
+        long,
+        help = t!("core_clap.disable_kcp_input").to_string(),
+        default_value = "false"
+    )]
+    disable_kcp_input: bool,
 }
 
 rust_i18n::i18n!("locales", fallback = "en");
@@ -548,6 +562,7 @@ impl TryFrom<&Cli> for TomlConfigLoader {
             f.relay_network_whitelist = wl.join(" ");
         }
         f.disable_p2p = cli.disable_p2p;
+        f.disable_udp_hole_punching = cli.disable_udp_hole_punching;
         f.relay_all_peer_rpc = cli.relay_all_peer_rpc;
         if let Some(ipv6_listener) = cli.ipv6_listener.as_ref() {
             f.ipv6_listener = ipv6_listener
@@ -567,6 +582,8 @@ impl TryFrom<&Cli> for TomlConfigLoader {
         if let Some(bind_device) = cli.bind_device {
             f.bind_device = bind_device;
         }
+        f.enable_kcp_proxy = cli.enable_kcp_proxy;
+        f.disable_kcp_input = cli.disable_kcp_input;
         cfg.set_flags(f);
 
         cfg.set_exit_nodes(cli.exit_nodes.clone());
